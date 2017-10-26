@@ -1,14 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <fstream>
 
 using namespace std;
 
+
+/**
+ * 定义结构
+ * */
 struct NODE {
     // 自身序号
     int name;
     // 观察者 时间
     int observe_time;
+    //实际观察人数
+    int times;
     // 指向 唯一的父节点的指针
     NODE *parent = NULL;
     //指向 子节点指针 的数组，为了可便捷动态大小，使用STL中的vector 容器----动态数组。
@@ -122,73 +129,133 @@ stack<NODE*> getPath(NODE nodes[], int start_index, int end_index) {
     return path;
 }
 
-
-
-int main() {
-
-    /**
-     * 1、输入 缓存：定义变量、各种cin，完整加载所有输入内容 到变量
-     * */
-    // n 个节点 和对应观察员， m个 人
-    int n = 6, m = 3;
+/**
+ * 读取输入流 到 指定的数据结构中
+ * */
+void readInput(ifstream &fin, int n, int m,   EDGE *edges,  int *observe_time,  EDGE *start_end) {
     int i;
-    // 观察者时间
-    int observe_time[] = {0, 2, 5, 1, 2, 3};
+    for (i = 0; i < n - 1; i++) {
+        fin >> edges[i].start >> edges[i].end;
+    }
+    for (i = 0; i < n; i++) {
+        fin >> observe_time[i];
+    }
+    for (i = 0; i < m; i++) {
+        fin >> start_end[i].start >> start_end[i].end;
+    }
+}
 
-    // 节点的 边
-    struct EDGE edges[] = {
-            {2, 3},
-            {1, 2},
-            {1, 4},
-            {4, 5},
-            {4, 6}
-    };
-
-    /**
-     * 2、定义结构
-     * */
-
-
-    /**
-     * 3、清洗：转换 数据类型
-     * */
-    //存放所有节点
-    NODE nodes[n];
+/**
+ *  初始化节点，以及节点的 父子关系
+ * */
+void initNodes(int n, const EDGE *edges, const int *observe_time, NODE *nodes) {
+    int i;
     //初始化所有节点
     for (i = 0; i < n; i++) {
-        NODE node;
-        node.name = i + 1;
-        node.observe_time = observe_time[i];
-        nodes[i] = node;
-    };
+            NODE node;
+            node.name = i + 1;
+            node.times = 0;
+            node.observe_time = observe_time[i];
+            nodes[i] = node;
+        };
 
     //根据 边 初始化节点 关系
     for (i = 0; i < n - 1; i++) {
-        EDGE edge = edges[i];
-        nodes[edge.end - 1].parent = &nodes[edge.start - 1];
-        nodes[edge.start - 1].children.push_back(&nodes[edge.end - 1]);
+            EDGE edge = edges[i];
+            nodes[edge.end - 1].parent = &nodes[edge.start - 1];
+            nodes[edge.start - 1].children.push_back(&nodes[edge.end - 1]);
+        }
+}
+
+/**
+ *  输出观察次数到文件
+ * */
+void outputToFile(ofstream &fout, int n, const NODE *nodes) {
+    int i;
+    for (i = 0; i < n; i++) {
+            fout << nodes[i].times;
+            // 这样是为了 让最后一个输出后面不是空格，而是回车
+            if (i < n - 1) {
+                fout << " ";
+            } else {
+                fout << endl;
+            }
+        }
+}
+
+int main() {
+    /**
+     * 1、声明 文件输入输出流
+     * */
+    // 这里是因为cmake编译后文件在子目录下，todo： 比赛环节应该如何做？是指定文件名，还是通过main参数引入？
+    ifstream fin("./../data.in");
+    ofstream fout("./../data.out");
+
+    if(fin.fail() )
+    {
+        cout << "打开文件失败---- 这个判断应不需要"<<endl;
+        exit(1);
     }
 
-    /**
-     * 4、处理逻辑
-     * */
-    testNodes(n, nodes);
+    do {
+        /**
+        * 2、定义用来保存输入的 变量； 完整加载一组数据 的所有输入内容 到变量
+        * */
+        // n代表树的结点数量，同时也是观察员的数量， m代表玩家的数量
+        int n, m, i;
+        fin >> n >> m;
 
-    stack<NODE*> path = getPath(nodes, 5, 3);
+        //保存所有边的数组。两个整数u和v，表示结点u到结点v有一条边
+        EDGE edges[n - 1];
+        // n个整数，其中第j个整数为Wj，表示结点j出现观察员的时间
+        int observe_time[n];
+        //m行，每行两个整数Si和Ti，表示一个玩家的起点和终点 。由于结构和EGGE一致，所有也用EDGE
+        EDGE start_end[m];
+        // 读取输入流 到上面声明的 输入数据中
+        readInput(fin, n, m, edges, observe_time, start_end);
 
-    /**
-     * 5、输出，各种cout
-     * */
-    // 输出 路径
-    while(!path.empty()){
-        cout<< "node: "<< path.top()->name << endl;
-        path.pop();
-    }
+        /**
+         * 3、清洗：转换 数据类型 为 符合处理算法需要的数据结构： 用NODE 结构体来描述 树形结构的 一个节点
+         * */
+        //存放所有节点
+        NODE nodes[n];
+        //初始化节点，以及节点的 父子关系
+        initNodes(n, edges, observe_time, nodes);
 
+        /**
+         * 4、处理逻辑
+         * */
+        testNodes(n, nodes);
+
+        for (i = 0; i < m; i++) {
+            stack<NODE *> path = getPath(nodes, start_end[i].start, start_end[i].end);
+            int count = 0;
+            // 根据路径 判断 节点观察到的人数
+            while (!path.empty()) {
+                // 输出 路径。 注意竞赛不能输出
+                cout << "node: " << path.top()->name << " - >";
+                if (path.top()->observe_time == count) {
+                    path.top()->times++;
+                }
+                path.pop();
+                count++;
+            }
+            cout << endl;
+        }
+
+        /**
+         * 5、输出： 输出观察次数到文件. todo： 这样输出是否赛题要求？
+         * */
+        outputToFile(fout, n, nodes);
+
+    }while(!fin.eof());
     /**
      * 6、退出
      * */
 
-
+    // 不要忘了关闭流
+    // 需要竞赛环境 支持多组数据传入，这样就应该在退出前关闭
+    fin.close();
+    fout.close();
     return 0;
 }
