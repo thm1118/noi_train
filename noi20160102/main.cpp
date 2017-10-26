@@ -10,7 +10,7 @@ struct NODE {
     // 观察者 时间
     int observe_time;
     // 指向 唯一的父节点的指针
-    NODE *parent = nullptr;
+    NODE *parent = NULL;
     //指向 子节点指针 的数组，为了可便捷动态大小，使用STL中的vector 容器----动态数组。
     vector<NODE *> children;
 };
@@ -53,7 +53,7 @@ bool findPreNode(stack<NODE*> *path, NODE* start, NODE* end) {
         return true;
     }
     NODE* parent = start->parent;
-    if(parent == nullptr){
+    if(parent == NULL){
         //如果 没有父节点, 那就彻底找不到了
         return false;
     }else{
@@ -87,7 +87,7 @@ void testNodes(int n, NODE nodes[]) {
     int i, j;
     for (i = 0; i < n ; i++) {
         cout << "node:" << nodes[i].name << endl;
-        if (nodes[i].parent != nullptr) {
+        if (nodes[i].parent != NULL) {
             cout << "\tparent:" << (nodes[i].parent)->name << endl;
         }
         cout << "\tchildren count:" << nodes[i].children.size() << endl;
