@@ -13,12 +13,12 @@
 - ![测试数据](img/evaldata.png)
 
 ## 4、添加选手，注意编号
-- ![创建选手](cadinate.png)
+- ![创建选手](img/cadinate.png)
 
 ## 5、选手提交的待测评源码
 - players 目录/ 选手编号/试题名称/ 源码文件-->试题名称.cpp
-- ![测评源码](source.png)
+- ![测评源码](img/source.png)
 
 ## 6、测评
-- ![测评](starttest.png)
+- ![测评](img/starttest.png)
 
