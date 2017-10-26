@@ -18,6 +18,8 @@
 ## 5、选手提交的待测评源码
 - players 目录/ 选手编号/试题名称/ 源码文件-->试题名称.cpp
 - ![测评源码](img/source.png)
+- 注意源码中 输入输出文件的指定 ：试题名.in / 试题名.out
+- ![输出和输出](img/input_output.png)
 
 ## 6、测评
 - ![测评](img/starttest.png)
