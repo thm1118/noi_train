@@ -194,7 +194,7 @@ int main() {
     if(fin.fail() )
     {
         cout << "打开文件失败---- 这个判断应不需要"<<endl;
-        exit(1);
+        return 1;
     }
 
     do {
