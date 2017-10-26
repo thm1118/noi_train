@@ -87,7 +87,7 @@ bool findPreNode(stack<NODE*> *path, NODE* start, NODE* end) {
 
 
 /**
- *  测试节点关系
+ *  测试节点关系 。
  *  cout 输出中使用了 \t  :表示tab制表符，等同于键盘按下tab键。 endl 表示回车
  * */
 void testNodes(int n, NODE nodes[]) {
@@ -223,11 +223,11 @@ int main() {
         //初始化节点，以及节点的 父子关系
         initNodes(n, edges, observe_time, nodes);
 
+        /** 注意竞赛环节 不要输出，或者测试输出后及时注释掉代码*/
+        testNodes(n, nodes);
         /**
          * 4、处理逻辑
          * */
-        testNodes(n, nodes);
-
         for (i = 0; i < m; i++) {
             stack<NODE *> path = getPath(nodes, start_end[i].start, start_end[i].end);
             int count = 0;
@@ -245,7 +245,7 @@ int main() {
         }
 
         /**
-         * 5、输出： 输出观察次数到文件. todo： 这样输出是否赛题要求？
+         * 5、输出： 输出观察次数到文件
          * */
         outputToFile(fout, n, nodes);
 
