@@ -189,8 +189,8 @@ int main() {
      * */
     // 这里是相对目录 是因为cmake编译后执行文件在子目录下
     /** 比赛环节应该: 如果 题目指定输入输出文件名，则 文件名为  试题名.in， 试题名.out, 不带目录*/
-    ifstream fin("./../data.in");
-    ofstream fout("./../data.out");
+    ifstream fin("data.in");
+    ofstream fout("data.out");
 
     if(fin.fail() )
     {
