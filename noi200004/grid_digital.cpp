@@ -13,11 +13,12 @@ vector<vector<int> > matrix, maxValuesCache;
 // NODE结构体 用来定义 路径链表 上的一个节点。包含节点当前对应的matrix的行列坐标，以及下一个节点
 struct NODE{
     int row,col;
-    NODE *next = NULL;
+    NODE *next;
     // 初始化不存在的行列
     NODE(int x = -1, int y = -1){
         this->row = x;
         this->col = col;
+        this->next = NULL;
     }
 };
 // 存放所有可能存在的NODE，这样避免每次都需要创建（还导致需要判断该坐标是否已创建）
