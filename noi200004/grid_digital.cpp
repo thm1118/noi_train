@@ -58,12 +58,15 @@ int getMaxOfChildren(int row, int col){
 
 // 清理获得最大值路径链表对应的值。
 void clearPath(int row,int col){
+#ifdef LOCAL
+    cout << row << "," << col << "," << matrix[row][col] << endl;
+#endif
     matrix[row][col] = 0;
     if(mRefs[row][col].next != NULL) clearPath(mRefs[row][col].next->row, mRefs[row][col].next->col);
 }
 
 void printPath(int row, int col){
-    cout << row << "," << col << "," << matrix[row][col] << endl;
+
     if(mRefs[row][col].next != NULL) printPath(mRefs[row][col].next->row, mRefs[row][col].next->col);
 }
 
@@ -98,14 +101,12 @@ int main(){
     }while(true);
 
     int max_value1 = getMaxOfChildren(0, 0);
-#ifdef LOCAL
-    printPath(0, 0);
-#endif
+
     clearPath(0, 0);
 
 #ifdef LOCAL
     cout << endl;
-    printPath(0, 0);
+    clearPath(0, 0);
 #endif
 
     //重置缓存
