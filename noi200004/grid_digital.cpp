@@ -1,7 +1,11 @@
 #include <iostream>
+#ifdef LOCAL
 #include <fstream>
+#endif
 #include <vector>
 using namespace std;
+
+
 
 int n;
 // matrix 存放 n 矩阵。maxValuesCache 用来保存已计算后续路径 最大值的点的值
@@ -49,7 +53,7 @@ int getMaxOfChildren(int row, int col){
     return maxValuesCache[row][col] = matrix[row][col] + max_value;
     // 如果不需要记录路径，下面 这一行注释代码就满足提取 后续路径最大值的需求了。
 //    return maxValuesCache[row][col] =  matrix[row][col] +
-//            max((col+1 < n) ? getMaxOfChild(row, col+1) : 0, (row + 1) < n ?getMaxOfChildren(row + 1, col): 0);
+//            max((col+1 < n) ? getMaxOfChildren(row, col+1) : 0, (row + 1) < n ?getMaxOfChildren(row + 1, col): 0);
 }
 
 // 清理获得最大值路径链表对应的值。
@@ -58,9 +62,22 @@ void clearPath(int row,int col){
     if(mRefs[row][col].next != NULL) clearPath(mRefs[row][col].next->row, mRefs[row][col].next->col);
 }
 
+void printPath(int row, int col){
+    cout << row << "," << col << "," << matrix[row][col] << endl;
+    if(mRefs[row][col].next != NULL) printPath(mRefs[row][col].next->row, mRefs[row][col].next->col);
+}
+
+
+
 int main(){
+#ifdef LOCAL
     ifstream fin("grid_digital.in");
     fin >> n;
+#endif
+
+#ifndef LOCAL
+    cin >>n;
+#endif
     // 读取
     matrix = vector<vector<int> >(n, vector<int>(n, 0));
     //保存每个点 后续路径中的的最大值
@@ -70,21 +87,39 @@ int main(){
 
     do{
         int row, col, value;
+#ifdef LOCAL
         fin >> row >> col >> value;
+#endif
+#ifndef LOCAL
+        cin >> row >> col >> value;
+#endif
         if(!row && !col && !value) break;
         matrix[row-1][col-1] = value;
     }while(true);
 
     int max_value1 = getMaxOfChildren(0, 0);
-    cout << "maxvalue1: " << max_value1 <<endl;
+#ifdef LOCAL
+    printPath(0, 0);
+#endif
     clearPath(0, 0);
+
+#ifdef LOCAL
+    cout << endl;
+    printPath(0, 0);
+#endif
 
     //重置缓存
     maxValuesCache = vector<vector<int> >(n, vector<int>(n, -1));
     int max_value2 = getMaxOfChildren(0, 0);
+#ifdef LOCAL
+    cout << "maxvalue1: " << max_value1 <<endl;
     cout << "maxvalue2: " << max_value2 <<endl;
-
     cout << "sum of maxvalue: " << max_value1 + max_value2 << endl;
     fin.close();
+#endif
+#ifndef LOCAL
+    cout << max_value1 + max_value2 << endl;
+#endif
+
     return 0;
 }
