@@ -65,12 +65,6 @@ void clearPath(int row,int col){
     if(mRefs[row][col].next != NULL) clearPath(mRefs[row][col].next->row, mRefs[row][col].next->col);
 }
 
-void printPath(int row, int col){
-
-    if(mRefs[row][col].next != NULL) printPath(mRefs[row][col].next->row, mRefs[row][col].next->col);
-}
-
-
 
 int main(){
 #ifdef LOCAL
