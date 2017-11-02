@@ -8,5 +8,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_definitions(-DLOCAL)
 #add_definitions(-std=c++98)
-set(SOURCE_FILES lis.cpp)
+set(SOURCE_FILES lis_recursive.cpp)
 add_executable(dp ${SOURCE_FILES})
