@@ -8,5 +8,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_definitions(-DLOCAL)
 
-set(SOURCE_FILES grid_digital.cpp)
+set(SOURCE_FILES  gird_digital_fix.cpp)
 add_executable(grid_digital ${SOURCE_FILES})

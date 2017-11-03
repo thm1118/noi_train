@@ -1,6 +1,11 @@
 #include<cstdio>
 #include<iostream>
 
+/**
+ * 两人一起行走 来动规 迭代实现，来自洛谷
+ *
+ * */
+
 using namespace std;
 int dp[12][12][12][12], a[12][12], maxn, ans = 0;
 
